@@ -1,32 +1,43 @@
+#include "function_pointers.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include "3-calc.h"
 /**
-  * main - Entry point
-  * @argc: the number of the parameters
-  * @argv: the parameters in the case the number to be calculated.
-  (* a blank line
-  * Description: this program is the enttry point for a calculator)?
-  (* section header: 3-calc.h)*
-  * Return: 0 in success
-  */
-int main(int argc, char *argv[])
+ * main - Prints the result of simple operations.
+ * @argc: The number of arguments supplied to the program.
+ * @argv: An array of pointers to the arguments.
+ *
+ * Return: Always 0.
+ */
+int main(int __attribute__((__unused__)) argc, char *argv[])
 {
-	int n1, n2, result;
-	int (*p)(int, int);
+	int num1, num2;
+	char *op;
 
-	if (argc < 4 || argc > 4)
+	if (argc != 4)
 	{
 		printf("Error\n");
 		exit(98);
 	}
-	n1 = atoi(argv[1]);
-	n2 = atoi(argv[3]);
-	p = get_op_func(argv[2]);
 
-	if (p == NULL)
+	num1 = atoi(argv[1]);
+	op = argv[2];
+	num2 = atoi(argv[3]);
+
+	if (get_op_func(op) == NULL || op[1] != '\0')
 	{
 		printf("Error\n");
 		exit(99);
-		result = p(n1, n2);
-		printf("%d\n", result);
-		return (0);
+	}
+
+	if ((*op == '/' && num2 == 0) ||
+	    (*op == '%' && num2 == 0))
+	{
+		printf("Error\n");
+		exit(100);
+	}
+
+	printf("%d\n", get_op_func(op)(num1, num2));
+
+	return (0);
 }
